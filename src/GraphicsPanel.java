@@ -257,7 +257,7 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
             g.drawImage(winani.getAniScreen(), 0, 0, null);
             if (winani.isAniEnd()) {
                 g.setFont(new Font("Courier New", Font.BOLD, 50));
-                g.drawString("VICTORY", 900, 500);
+                g.drawString("VICTORY", 800, 500);
 
             }
         }
@@ -269,7 +269,7 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
             g.drawImage(background, 0, 0, null);
             g.setFont(new Font("Courier New", Font.BOLD, 50));
             g.setColor(Color.red);
-            g.drawString("DEFEAT", 900, 500);
+            g.drawString("DEFEAT", 800, 500);
         }
 
 

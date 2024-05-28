@@ -14,6 +14,7 @@ public class WelcomePanel extends JPanel implements ActionListener {
     private BufferedImage logo;
 
     public WelcomePanel(JFrame frame) {
+
         enclosingFrame = frame;
         try {
             logo = ImageIO.read(new File("images/LElogo.png"));
