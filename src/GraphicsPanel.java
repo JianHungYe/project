@@ -5,7 +5,7 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
+
 
 
 
@@ -15,7 +15,6 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
     private JTextField mdelay;
     private BufferedImage background;
 
-    private boolean[] pressedKeys;
 
     private boolean showPSU;
 
@@ -30,7 +29,7 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
     private AniPanels missileani2;
     private AniPanels winani;
     private int time;
-    private int count;
+
     private int clickcount;
     private int bgStage;
 
@@ -45,14 +44,12 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
     private boolean winc1 = false;
     private boolean winc2 = false;
 
-    private boolean losec1 = false;
-
     private boolean stop = false;
 
     private String dialogue;
     private String dialogue2;
 
-    private String torpTubeStatus;
+    private int torpTubeStatus;
     private PDC seedPDC1;
     private PDC seedPDC2;
 
@@ -85,7 +82,7 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
 
 
 
-    public GraphicsPanel(String name) {
+    public GraphicsPanel() {
         try {
             background = ImageIO.read(new File("images/background1.png"));
             AATicon = new ImageIcon(("images/activebutton.png"));
@@ -96,14 +93,12 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
             System.out.println(e.getMessage() + "graphics panel");
         }
 
-        pressedKeys = new boolean[128];
-        torpTubeStatus = "standby";
+        torpTubeStatus = 1;
         time = 0;
-        count = 0;
         clickcount = 3;
         timer = new Timer(1000, this); // this Timer will call the actionPerformed interface method every 1000ms = 1 second
         timer.start();
-        aniTimer = new Timer(40, this);
+        aniTimer = new Timer(20, this);
         aniTimer.start();
         bgStage = 1;
         paneltype = 1;
@@ -177,9 +172,12 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
         super.paintComponent(g);  // just do this
 
 
-        if (!(startani.isAniEnd())) {
-//            startani.setAniEnd(true);
+        if (bgStage == 0) {
+
             g.drawImage(startani.getAniScreen(), 0, 0, null);
+            if (startani.isAniEnd()){
+                bgStage = 1;
+            }
         } else if (bgStage == 1) {
 
 
@@ -190,7 +188,7 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
             g.drawString(dialogue, 100, 900);
 
 
-        }else if (bgStage == 2 || torpTubeStatus.equals("firing")){
+        }else if (bgStage == 2 || torpTubeStatus == 2){
 
             g.drawImage(background, 0, 0, null);
             pdcTab.setVisible(true);
@@ -249,7 +247,7 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
                     g.drawImage(missileani1.getAniScreen(), 420, 600, null);
                 }
             }
-        }else if (bgStage == 3 && torpTubeStatus.equals("standby")) {
+        }else if (bgStage == 3 && torpTubeStatus == 1) {
             launchM.setVisible(false);
             missileTab.setVisible(false);
             pdcTab.setVisible(false);
@@ -260,8 +258,7 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
                 g.drawString("VICTORY", 800, 500);
 
             }
-        }
-        if (bgStage == 4){
+        }else if (bgStage == 4){
             launchM.setVisible(false);
             missileTab.setVisible(false);
             pdcTab.setVisible(false);
@@ -271,13 +268,6 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
             g.setColor(Color.red);
             g.drawString("DEFEAT", 800, 500);
         }
-
-
-
-        // this loop does two things:  it draws each Coin that gets placed with mouse clicks,
-        // and it also checks if the player has "intersected" (collided with) the Coin, and if so,
-        // the score goes up and the Coin is removed from the arraylist
-
     }
 
 
@@ -291,18 +281,12 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
 
 
     public void keyPressed(KeyEvent e) {
-        // see this for all keycodes: https://stackoverflow.com/questions/15313469/java-keyboard-keycodes-list
-        // A = 65, D = 68, S = 83, W = 87, left = 37, up = 38, right = 39, down = 40, space = 32, enter = 10
-        int key = e.getKeyCode();
-        pressedKeys[key] = true;
     }
 
 
 
 
     public void keyReleased(KeyEvent e) {
-        int key = e.getKeyCode();
-        pressedKeys[key] = false;
     }
 
 
@@ -323,7 +307,7 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
     public void mouseReleased(MouseEvent e) {
         if (e.getButton() == MouseEvent.BUTTON1) {  // left mouse click
 
-            if (bgStage ==1 && startani.isAniEnd()){
+            if (bgStage ==1){
 
                 clickcount++;
                 if (clickcount < Messages.getlength(1)){
@@ -335,7 +319,7 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
                         bgStage = 2;
                         clickcount = 0;
                     } catch (IOException ex) {
-                        System.out.println(ex.getMessage());
+                        System.out.println(ex.getMessage() + "graphic");
                     }
 
                 }
@@ -371,13 +355,11 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
 
     // ACTIONLISTENER INTERFACE METHODS: used for buttons AND timers!
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() instanceof Timer) {
-            Timer timersource = (Timer) e.getSource();
+        if (e.getSource() instanceof Timer timersource) {
             if (timersource == aniTimer){
-                if (!(startani.isAniEnd())){
+                if (bgStage == 0){
                     startani.nextframe();
-                }
-                if (showPSU && !(pdcani1.isAniEnd())){
+                }else if (showPSU && !(pdcani1.isAniEnd())){
                     timerreduction1++;
                     if (timerreduction1 == 2){
                         pdcani1.nextframe();
@@ -389,7 +371,7 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
 
                 }else if (showML && !(missileani1.isAniEnd())){
                     timerreduction1++;
-                    torpTubeStatus = "firing";
+                    torpTubeStatus = 2;
                     if (timerreduction1 == 2){
                         missileani1.nextframe();
 
@@ -397,7 +379,7 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
                             launchM.setIcon(launchMicon);
                             missileani1.setFrame(0);
                             showML = false;
-                            torpTubeStatus = "standby";
+                            torpTubeStatus = 1;
                             missileani1.setAniEnd(false);
                         }
                         timerreduction1 = 0;
@@ -418,8 +400,8 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
                         timerreduction2 = 0;
                     }
                 }
-                if (winc2 && !winani.isAniEnd() && torpTubeStatus.equals("standby")){
-                    bgStage = 3;
+                if (winc2 && !winani.isAniEnd() && torpTubeStatus == 1){
+
                     winani.nextframe();
 
                 }
@@ -429,7 +411,6 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
                 time++;
                 System.out.println(time);
                 if (first && time - current == 60 && !winc2){
-                    losec1 = true;
                     bgStage = 4;
                     try {
                         background = ImageIO.read(new File("images/lose.png"));
@@ -440,8 +421,7 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
                 }
             }
         }
-        if (e.getSource() instanceof JButton) {
-            JButton button = (JButton) e.getSource();
+        if (e.getSource() instanceof JButton button) {
             if (button == activateAuto ) {
                 showPSU = true;
                 activateAuto.setIcon(new ImageIcon("images/activebutton2.png"));
@@ -451,7 +431,7 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
             else if (button == launchM && launchM.getIcon() == launchMicon) {
                 showML = true;
                 launchM.setIcon(new ImageIcon("images/LMbutton2.png"));
-                if (!(mdelay.getText().equals(""))){
+                if (!(mdelay.getText().isEmpty())){
                     try {
                         delaytime = Integer.parseInt(mdelay.getText());
                     } catch (NumberFormatException ex) {
@@ -467,6 +447,7 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
                 } else{
                     if (winc1){
                         winc2 = true;
+                        bgStage = 3;
                         System.out.println("u win");
                     }
                 }

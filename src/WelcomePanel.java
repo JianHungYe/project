@@ -19,7 +19,7 @@ public class WelcomePanel extends JPanel implements ActionListener {
         try {
             logo = ImageIO.read(new File("images/LElogo.png"));
         } catch (IOException e) {
-            System.out.println(e.getMessage());
+            System.out.println(e.getMessage() + "welcome");
         }
 
         submitButton = new JButton("Enter");
@@ -36,7 +36,7 @@ public class WelcomePanel extends JPanel implements ActionListener {
         g.setFont(new Font("Arial", Font.BOLD, 16));
         g.setColor(Color.BLACK);
         g.drawString("Welcome Captain of the Empire", 30, 110);
-        g.drawImage(logo, 100, 0, null);
+        g.drawImage(logo, 90, 0, null);
 
 
         submitButton.setLocation(110, 125);
@@ -44,10 +44,9 @@ public class WelcomePanel extends JPanel implements ActionListener {
 
     // ACTIONLISTENER INTERFACE METHODS
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() instanceof JButton) {
-            JButton button = (JButton) e.getSource();
-            if (button == submitButton) {;
-                MainFrame f = new MainFrame("");
+        if (e.getSource() instanceof JButton button) {
+            if (button == submitButton) {
+                MainFrame f = new MainFrame();
                 enclosingFrame.setVisible(false);
             }
         }
