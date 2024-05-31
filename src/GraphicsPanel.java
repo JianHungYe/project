@@ -100,7 +100,7 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
         timer.start();
         aniTimer = new Timer(20, this);
         aniTimer.start();
-        bgStage = 1;
+        bgStage = 0;
         paneltype = 1;
         dialogue = Messages.getMessage(1,0);
         dialogue2 = Messages.getMessage(2, 0);
@@ -174,7 +174,7 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
 
         if (bgStage == 0) {
 
-            g.drawImage(startani.getAniScreen(), 0, 0, null);
+            g.drawImage(startani.getAniScreen(), 0, 0, 1366, 768, null);
             if (startani.isAniEnd()){
                 bgStage = 1;
             }
@@ -252,7 +252,7 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
             missileTab.setVisible(false);
             pdcTab.setVisible(false);
             mdelay.setVisible(false);
-            g.drawImage(winani.getAniScreen(), 0, 0, null);
+            g.drawImage(winani.getAniScreen(), 0, 0,1366, 768, null);
             if (winani.isAniEnd()) {
                 g.setFont(new Font("Courier New", Font.BOLD, 50));
                 g.drawString("VICTORY", 800, 500);
