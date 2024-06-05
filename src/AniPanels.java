@@ -43,6 +43,25 @@ public class AniPanels {
         this.type = type;
     }
 
+    public AniPanels (String folder, int type, int start){
+        anifolder = folder;
+        aniEnd = false;
+        try {
+            aniScreen = ImageIO.read(new File("animations/" + folder + "/0001.png"));
+        } catch (IOException e) {
+            System.out.println(e.getMessage()+ "ani " + folder);
+        }
+        count = 0;
+        File f = new File("animations/" + anifolder);
+        for (File file: f.listFiles()){
+            count++;
+        }
+        System.out.println(count);
+        frame = start;
+        count += start;
+        this.type = type;
+    }
+
 
 //what went wrong?
 

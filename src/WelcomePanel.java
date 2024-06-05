@@ -36,7 +36,7 @@ public class WelcomePanel extends JPanel implements ActionListener {
         g.setFont(new Font("Arial", Font.BOLD, 16));
         g.setColor(Color.BLACK);
         g.drawString("Welcome Captain of the Empire", 30, 110);
-        g.drawImage(logo, 90, 0, null);
+        g.drawImage(logo, 90, 0, 100,100, null);
 
 
         submitButton.setLocation(110, 125);

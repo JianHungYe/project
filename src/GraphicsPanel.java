@@ -70,7 +70,7 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
 
     private ImageIcon pdctabicon;
     private ImageIcon missiletabicon;
-
+    private BufferedImage logo;
     private ImageIcon launchMicon;
 
     private JButton activateAuto;
@@ -78,22 +78,9 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
     private JButton missileTab;
     private JButton launchM;
 
-
-
-
-
-
-
     private int timerreduction1 = 0;
 
     private int timerreduction2 = 0;
-
-
-
-
-
-
-
 
     public GraphicsPanel() {
         try {
@@ -103,6 +90,7 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
             missiletabicon = new ImageIcon("images/mtab1.png");
             launchMicon = new ImageIcon("images/LMbutton.png");
             wcpanel = ImageIO.read(new File("images/wcPanel.png"));
+            logo = ImageIO.read(new File("images/LElogo.png"));
         } catch (IOException e) {
             System.out.println(e.getMessage() + "graphics panel");
         }
@@ -112,7 +100,7 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
         clickcount = 3;
         timer = new Timer(1000, this); // this Timer will call the actionPerformed interface method every 1000ms = 1 second
         timer.start();
-        aniTimer = new Timer(20, this);
+        aniTimer = new Timer(15, this);
         aniTimer.start();
         bgStage = 1;
         paneltype = 1;
@@ -120,7 +108,7 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
         dialogue2 = Messages.getMessage(2, 0);
         seedPDC1 = new PDC(1, "Online", 5000);
         seedPDC2 = new PDC(1, "Online", 5000);
-        guidev = true;
+        guidev = false;
 
 
         mdelay = new JTextField(1);
@@ -175,7 +163,7 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
         missileani2 = new AniPanels("missilerotating", 2);
         missileanig = new AniPanels("missilelaunchglobal", 1);
         loseani = new AniPanels("loseani",1);
-        winani = new AniPanels("win", 1);
+        winani = new AniPanels("win", 1,70);
         idleani = new AniPanels("idle", 1);
 
         addKeyListener(this);
@@ -202,6 +190,7 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
 
 
             g.drawImage(background, 0, 0, 1366, 768, null);
+            g.drawImage(logo, 550, 175, 300,300, null);
 
             g.setFont(new Font("Courier New", Font.BOLD, 18));
             g.setColor(Color.white);
@@ -216,7 +205,6 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
                 g.drawImage(missileanig.getAniScreen(),0, 0, null);
             }else if (idle){
                 g.drawImage(idleani.getAniScreen(), 0, 0, null);
-
             }else{
                 g.drawImage(background, 0, 0, 900, 768,null);
             }
@@ -281,7 +269,7 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
             g.drawImage(winani.getAniScreen(), 0, 0,1366, 768, null);
             if (winani.isAniEnd()) {
                 g.setFont(new Font("Courier New", Font.BOLD, 50));
-                g.drawString("VICTORY", 800, 500);
+                g.drawString("VICTORY", 560, 350);
 
             }
         }else if (bgStage == 4){
@@ -292,7 +280,7 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
             g.drawImage(background, 0, 0, null);
             g.setFont(new Font("Courier New", Font.BOLD, 50));
             g.setColor(Color.red);
-            g.drawString("DEFEAT", 800, 500);
+            g.drawString("DEFEAT", 580, 350);
         }
 
         if (guidev){
@@ -403,6 +391,7 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
                             showPSU = false;
                         }
                         timerreduction1 = 0;
+                        System.out.println("pdc1");
                     }
 
                 }else if (showML && !(missileani1.isAniEnd())){
@@ -420,16 +409,19 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
                             torpTubeStatus = 1;
                             missileani1.setAniEnd(false);
                             missileanig.setAniEnd(false);
+
                         }
                         timerreduction1 = 0;
+                        System.out.println("m1");
                     }
 
-                }else if(idle){
+                }else if(idle && !winc2){
                     idleani.nextframe();
                     if (idleani.isAniEnd()){
                         idleani.setFrame(0);
                         idleani.setAniEnd(false);
                     }
+                    System.out.println("idle");
 
                 }
                 if (bgStage == 2) {
@@ -445,8 +437,7 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
 
                         timerreduction2 = 0;
                     }
-                }
-                if (winc2 && !winani.isAniEnd() && torpTubeStatus == 1){
+                }else if (winc2 && !winani.isAniEnd() && torpTubeStatus == 1){
 
                     winani.nextframe();
 
