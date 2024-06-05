@@ -7,7 +7,7 @@ public class MainFrame implements Runnable {
     public MainFrame() {
         JFrame frame = new JFrame("Celestial Domination v2");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(1920, 1080); //
+        frame.setSize(1366, 768); //
         frame.setLocationRelativeTo(null); // auto-centers frame in screen
 
         // create and add panel

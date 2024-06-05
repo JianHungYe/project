@@ -30,7 +30,7 @@ public class AniPanels {
         try {
             aniScreen = ImageIO.read(new File("animations/" + folder + "/0001.png"));
         } catch (IOException e) {
-            System.out.println(e.getMessage()+ "ani");
+            System.out.println(e.getMessage()+ "ani " + folder);
         }
         count = 0;
         File f = new File("animations/" + anifolder);
