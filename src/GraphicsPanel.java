@@ -32,6 +32,10 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
     private AniPanels idleani;
 
     private AniPanels missileanig;
+
+    private AniPanels pap1;
+    private AniPanels pap2;
+    private AniPanels pap3;
     private int time;
 
     private int clickcount;
@@ -59,6 +63,8 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
 
     private boolean lost = false;
 
+    private boolean mdetected = false;
+
     private String dialogue;
     private String dialogue2;
 
@@ -79,6 +85,8 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
     private JButton launchM;
 
     private int timerreduction1 = 0;
+
+    private int papstutus = 0;
 
     private int timerreduction2 = 0;
 
@@ -102,7 +110,7 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
         timer.start();
         aniTimer = new Timer(15, this);
         aniTimer.start();
-        bgStage = 1;
+        bgStage = 0;
         paneltype = 1;
         dialogue = Messages.getMessage(1,0);
         dialogue2 = Messages.getMessage(2, 0);
@@ -165,6 +173,14 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
         loseani = new AniPanels("loseani",1);
         winani = new AniPanels("win", 1,70);
         idleani = new AniPanels("idle", 1);
+        try{
+            pap1 = new AniPanels("pdcactivepath1", 1);
+            pap2 = new AniPanels("pdcactivepath2", 1);
+            pap3 = new AniPanels("pdcactivepath3", 1);
+        } catch (Exception e) {
+            System.out.println("animations not made yet");
+        }
+
 
         addKeyListener(this);
         addMouseListener(this);
@@ -273,6 +289,7 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
 
             }
         }else if (bgStage == 4){
+            activateAuto.setVisible(false);
             launchM.setVisible(false);
             missileTab.setVisible(false);
             pdcTab.setVisible(false);
@@ -382,25 +399,44 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
             if (timersource == aniTimer){
                 if (bgStage == 0){
                     startani.nextframe();
-
-                }else if (showPSU && !(pdcani1.isAniEnd())){
+                }else if (showPSU && !(pdcani1.isAniEnd())) {
                     timerreduction1++;
-                    if (timerreduction1 == 2){
+                    if (timerreduction1 == 2) {
                         pdcani1.nextframe();
-                        if (pdcani1.isAniEnd()){
+                        if (pdcani1.isAniEnd()) {
                             showPSU = false;
                         }
                         timerreduction1 = 0;
-                        System.out.println("pdc1");
                     }
-
+                }else if (pdcani1.isAniEnd() && mdetected && idle){
+                    if (papstutus == 1){
+                        pap1.nextframe();
+                        if (pap1.isAniEnd()){
+                            pap1.setFrame(0);
+                            mdetected = false;
+                            pap1.setAniEnd(false);
+                        }
+                    }else if (papstutus == 2){
+                        pap2.nextframe();
+                        if (pap2.isAniEnd()){
+                            pap2.setFrame(0);
+                            mdetected = false;
+                            pap2.setAniEnd(false);
+                        }
+                    }else if (papstutus == 3){
+                        pap3.nextframe();
+                        if (pap3.isAniEnd()){
+                            pap3.setFrame(0);
+                            mdetected = false;
+                            pap3.setAniEnd(false);
+                        }
+                    }
                 }else if (showML && !(missileani1.isAniEnd())){
                     timerreduction1++;
                     torpTubeStatus = 2;
                     if (timerreduction1 == 2){
                         missileani1.nextframe();
                         missileanig.nextframe();
-
                         if (missileani1.isAniEnd()){
                             launchM.setIcon(launchMicon);
                             missileani1.setFrame(0);
@@ -409,24 +445,19 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
                             torpTubeStatus = 1;
                             missileani1.setAniEnd(false);
                             missileanig.setAniEnd(false);
-
                         }
                         timerreduction1 = 0;
-                        System.out.println("m1");
                     }
-
                 }else if(idle && !winc2){
                     idleani.nextframe();
                     if (idleani.isAniEnd()){
                         idleani.setFrame(0);
                         idleani.setAniEnd(false);
                     }
-                    System.out.println("idle");
-
                 }
                 if (bgStage == 2) {
                     timerreduction2++;
-                    if (timerreduction2 == 3){
+                    if (timerreduction2 == 2){
                         if (paneltype == 1){
                             pdcani2.nextframe();
                         }
@@ -457,8 +488,18 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
 
             if (timersource == timer){
                 time++;
+                if (papstutus == 0 && pdcani1.isAniEnd()){
+                    int r = (int) (Math.random()*9)+1;
+                    System.out.println(r);
+                    if (r == 2){
+                        int c = (int) (Math.random()*2) +1;
+                        papstutus = c;
+                        System.out.println("MISSILES DETECTED: " + papstutus);
+                        papstutus = 0;
+                    }
+                }
                 System.out.println(time);
-                if (first && time - current == 10 && !winc2){
+                if (first && time - current == 30 && !winc2){
                     lost = true;
 
                     System.out.println("u lose");
