@@ -499,8 +499,8 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
 
             if (timersource == timer){
                 time++;
-                if (papstutus == 0 && pdcani1.isAniEnd()){
-                    int r = (int) (Math.random()*7)+1;
+                if (papstutus == 0 && pdcani1.isAniEnd() &&!showML &&!winc2){
+                    int r = (int) (Math.random()*6)+1;
                     System.out.println("r:" + r);
                     if (r == 2){
                         int c = (int) (Math.random()*3) +1;
