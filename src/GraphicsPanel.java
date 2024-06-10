@@ -36,6 +36,10 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
     private AniPanels pap1;
     private AniPanels pap2;
     private AniPanels pap3;
+
+    private AniPanels pap4;
+    private AniPanels pap5;
+    private AniPanels pap6;
     private int time;
 
     private int clickcount;
@@ -177,6 +181,9 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
             pap1 = new AniPanels("pdcactivepath1", 1);
             pap2 = new AniPanels("pdcactivepath2", 1);
             pap3 = new AniPanels("pdcactivepath3", 1);
+            pap4 = new AniPanels("pdcactivepath4", 1);
+            pap5 = new AniPanels("pdcactivepath5", 1);
+            pap6 = new AniPanels("pdcactivepath6", 1);
         } catch (Exception e) {
             System.out.println("animations not made yet");
         }
@@ -222,8 +229,14 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
                     g.drawImage(pap1.getAniScreen(), 0, 0, null);
                 }else if(papstutus ==2){
                     g.drawImage(pap2.getAniScreen(), 0, 0, null);
-                }else{
+                }else if(papstutus ==3){
                     g.drawImage(pap3.getAniScreen(), 0, 0, null);
+                }else if(papstutus ==4){
+                    g.drawImage(pap4.getAniScreen(), 0, 0, null);
+                }else if(papstutus ==5){
+                    g.drawImage(pap5.getAniScreen(), 0, 0, null);
+                }else{
+                    g.drawImage(pap6.getAniScreen(), 0, 0, null);
                 }
             }else if (showML){
                 g.drawImage(missileanig.getAniScreen(),0, 0, null);
@@ -441,6 +454,31 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
                             pap3.setAniEnd(false);
                             papstutus = 0;
                         }
+                    }else if (papstutus == 4){
+                        pap4.nextframe();
+                        if (pap4.isAniEnd()){
+                            pap4.setFrame(0);
+                            mdetected = false;
+                            pap4.setAniEnd(false);
+                            papstutus = 0;
+                        }
+                    }else if (papstutus == 5){
+                        pap5.nextframe();
+                        if (pap5.isAniEnd()){
+                            pap5.setFrame(0);
+                            mdetected = false;
+                            pap5.setAniEnd(false);
+                            papstutus = 0;
+                        }
+                    }else if (papstutus == 6){
+                        pap6.nextframe();
+                        if (pap6.isAniEnd()){
+                            pap6.setFrame(0);
+                            mdetected = false;
+                            pap6.setAniEnd(false);
+                            papstutus = 0;
+                        }
+
                     }
                 }else if (showML && !(missileani1.isAniEnd())){
                     timerreduction1++;
@@ -499,11 +537,11 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
 
             if (timersource == timer){
                 time++;
-                if (papstutus == 0 && pdcani1.isAniEnd()){
-                    int r = (int) (Math.random()*7)+1;
+                if (papstutus == 0 && pdcani1.isAniEnd() &&!showML &&!winc2){
+                    int r = (int) (Math.random()*6)+1;
                     System.out.println("r:" + r);
                     if (r == 2){
-                        int c = (int) (Math.random()*3) +1;
+                        int c = (int) (Math.random()*6) +1;
                         papstutus = c;
                         System.out.println("MISSILES DETECTED: " + papstutus);
                     }

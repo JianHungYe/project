@@ -2,26 +2,14 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.Timer;
-
-
-
 
 public class AniPanels {
-
-
-
-
     private BufferedImage aniScreen;
     private String anifolder;
     private int frame;
     private boolean aniEnd;
-
     private String prefix;
     private int type;
-
-
-
     int count;
 
     public AniPanels(String folder, int type){
@@ -91,9 +79,6 @@ public class AniPanels {
         }
         return aniScreen;
     }
-
-
-
 
     public boolean isAniEnd() {
         return aniEnd;
