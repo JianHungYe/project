@@ -114,7 +114,7 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
         timer.start();
         aniTimer = new Timer(15, this);
         aniTimer.start();
-        bgStage = 1;
+        bgStage = 0;
         paneltype = 1;
         dialogue = Messages.getMessage(1,0);
         dialogue2 = Messages.getMessage(2, 0);
@@ -538,12 +538,12 @@ public class GraphicsPanel extends JPanel implements KeyListener, MouseListener,
             if (timersource == timer){
                 time++;
                 if (papstutus == 0 && pdcani1.isAniEnd() &&!showML &&!winc2){
-                    int r = (int) (Math.random()*6)+1;
+                    int r = (int) (Math.random()*3)+1;
                     System.out.println("r:" + r);
                     if (r == 2){
                         int c = (int) (Math.random()*6) +1;
                         papstutus = c;
-                        System.out.println("MISSILES DETECTED: " + papstutus);
+                        System.out.println("PDC PATH: " + papstutus);
                     }
                 }
                 System.out.println(time);
